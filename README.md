@@ -1,3 +1,5 @@
+Pussy Financial sprites and settings implemented over the original game below:
+
 #Robot Unicorn Attack Extreme Edition
 
 ####[Live Link][link]

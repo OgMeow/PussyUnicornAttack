@@ -1,4 +1,3 @@
-
 var game = new Phaser.Game(800, 600, Phaser.AUTO);
 
 
@@ -79,6 +78,25 @@ var startText2;
 var startText3;
 var start = false;
 
+var mc = new Hammer(window); 
+mc.add( new Hammer.Tap({ event: 'singletap', taps: 1 }) );
+mc.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }) );
+
+
+var singleTapEvent = false;
+var doubleTapEvent = false;
+
+mc.on('singletap', function(ev) {
+    singleTapEvent = true;
+});
+
+mc.on('doubletap', function(ev) {
+    doubleTapEvent = true;
+});
+
+
+
+
 var GameState = {
 
 	create: function() {
@@ -136,7 +154,8 @@ var GameState = {
 
 
 	update: function() {
-		if (spaceButton.isDown && !start) {
+		if ((spaceButton.isDown || singleTapEvent) && !start) {
+			if (singleTapEvent) singleTapEvent = false;
 			startScreen.destroy();
 			startLogo.destroy();
 			startText.destroy();
@@ -166,8 +185,9 @@ var GameState = {
 
 			}
 
-			if (dashButton.isDown && !dashing)
+			if ((dashButton.isDown||singleTapEvent) && !dashing)
 			{
+				if(singleTapEvent) singleTapEvent = false;
 				game.physics.p2.gravity.y = 0;
 				if (player.body) player.body.velocity.y = 0;
 				dashing = true;
@@ -251,7 +271,8 @@ var GameState = {
 				platform1 = platform2;
 			}
 
-			if (spaceButton.isDown && dead) {
+			if ((spaceButton.isDown || singleTapEvent) && dead) {
+				if(singleTapEvent) singleTapEvent = false;
 				this.restartGame();
 			}
 
@@ -267,8 +288,9 @@ var GameState = {
 			}
 
 
-			if (jumpButton.isDown && player.body)
+			if ((jumpButton.isDown || doubleTapEvent) && player.body)
 			{
+				if(doubleTapEvent) doubleTapEvent = false;
 				player.body.moveUp(400);
 			} else {
 				platform1.body.velocity.x = velocity;
